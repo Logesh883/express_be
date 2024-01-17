@@ -42,7 +42,7 @@ app.use((err, req, res, next) => {
   err = error_handler(err.status, err.message);
   res.status(err.status).json({ err: err.message, success: false });
 });
-app.get("/get", async (req, res) => {
+app.get("/", async (req, res) => {
   res.json("Get");
 });
 

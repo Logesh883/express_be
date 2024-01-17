@@ -8,8 +8,6 @@ const imageSchema = mongoose.Schema(
     },
     image: {
       url: String,
-      default:
-        "https://res.cloudinary.com/dngjlekow/image/upload/v1705472140/samples/food/pot-mussels.jpg",
     },
     login: {
       type: mongoose.Schema.Types.ObjectId,

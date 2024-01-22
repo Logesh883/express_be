@@ -47,10 +47,12 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/post", async (req, res) => {
-  const hashPassword = await bcrypt.hash(req.body.Password, 10);
+  const { username, email, picture } = req.body;
+
   const data = await LoginSchema({
-    ...req.body,
-    Password: hashPassword,
+    UserName: username,
+    Email: email,
+    Picture: picture,
   });
   const savedData = await data.save();
   res.json({ data: savedData, msg: "User registered successfully" });

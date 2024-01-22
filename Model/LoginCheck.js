@@ -1,9 +1,24 @@
-const bcrypt = require("bcryptjs");
 const LoginSchema = require("../LoginSchema");
-const Logincheck = async (req, res) => {
-  const email = await LoginSchema.findOne({ Email: req.query.Email });
+const error_handler = require("../errorHandling");
+const json = require("jsonwebtoken");
+const COOKIE_NAME = process.env.COOKIE_NAME;
 
-  const CheckPass = await bcrypt.compare(req.query.Password, email.Password);
-  res.json(CheckPass);
+const Logincheck = async (req, res, next) => {
+  const user = await LoginSchema.findOne({ Email: req.query.email });
+
+  if (!user) {
+    return next(error_handler(404, "email not found"));
+  }
+  const jwt = json.sign({ id: user.id }, process.env.JWT_SECRET, {
+    expiresIn: "30min",
+  });
+  res.cookie(COOKIE_NAME, jwt, {
+    path: "/",
+    expires: new Date(Date.now() + 1000 * 60 * 27),
+    httpOnly: true,
+    sameSite: "lax",
+  });
+
+  res.json({ msg: "Login succesfull" });
 };
 module.exports = Logincheck;

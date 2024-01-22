@@ -1,12 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const multer = require("multer");
 const ImageSchema = require("./ImageSchema");
 const compression = require("compression");
-const fs = require("fs");
+const cookieParser = require("cookie-parser");
 const cloudinary = require("cloudinary").v2;
 const path = require("path");
 
@@ -33,8 +32,10 @@ app.use(
   cors({
     origin: ["https://expressyourthought.vercel.app", "http://localhost:3000"],
     methods: ["GET", "POST", "DELETE"],
+    credentials: true,
   })
 );
+app.use(cookieParser());
 app.use(compression());
 app.use(express.json({ limit: "10mb" }));
 app.use("/api", router);
@@ -47,12 +48,12 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/post", async (req, res) => {
-  const { username, email, picture } = req.body;
+  const { name, email, picture } = req.body;
 
   const data = await LoginSchema({
-    UserName: username,
+    UserName: name,
     Email: email,
-    Picture: picture,
+    Profile: picture,
   });
   const savedData = await data.save();
   res.json({ data: savedData, msg: "User registered successfully" });
@@ -62,6 +63,7 @@ const storage = multer.memoryStorage();
 const uploads = multer({ storage: storage });
 
 const DatauriParser = require("datauri/parser");
+
 const parser = new DatauriParser();
 
 app.post("/image/:Email", uploads.single("testImage"), async (req, res) => {

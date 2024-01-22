@@ -31,7 +31,7 @@ mongoose
   });
 app.use(
   cors({
-    origin: ["https://expressyourthought.vercel.app", "http://localhost:3000"],
+    origin: ["https://expressyourthought.vercel.app", "localhost:3000"],
     methods: ["GET", "POST", "DELETE"],
   })
 );

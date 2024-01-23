@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const multer = require("multer");
-const ImageSchema = require("./ImageSchema");
+
 const compression = require("compression");
 const cookieParser = require("cookie-parser");
 const cloudinary = require("cloudinary").v2;
@@ -30,7 +30,7 @@ mongoose
   });
 app.use(
   cors({
-    origin: ["https://expressyourthought.vercel.app", "http://localhost:3000"],
+    origin: "https://expressyourthought.vercel.app",
     methods: ["GET", "POST", "DELETE"],
     credentials: true,
   })

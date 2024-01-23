@@ -15,9 +15,6 @@ const Logincheck = async (req, res, next) => {
   res.cookie(COOKIE_NAME, jwt, {
     path: "/",
     expires: new Date(Date.now() + 1000 * 60 * 58),
-    httpOnly: true,
-    sameSite: "none",
-    secure: true,
   });
 
   res.json({ msg: "Login succesfull" });

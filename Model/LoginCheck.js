@@ -16,9 +16,8 @@ const Logincheck = async (req, res, next) => {
     path: "/",
     expires: new Date(Date.now() + 1000 * 60 * 58),
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "none",
     secure: true,
-    domain: ".vercel.app",
   });
 
   res.json({ msg: "Login succesfull" });

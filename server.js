@@ -30,7 +30,11 @@ mongoose
   });
 app.use(
   cors({
-    origin: ["https://expressyourthought.vercel.app", "http://localhost:3000"],
+    origin: [
+      "https://expressyourthought.vercel.app",
+      "http://localhost:3000",
+      "https://express-be.vercel.app/api/check",
+    ],
     methods: ["GET", "POST", "DELETE"],
     credentials: true,
   })
@@ -42,6 +46,7 @@ app.use("/api", router);
 app.use((err, req, res, next) => {
   err = error_handler(err.status, err.message);
   res.status(err.status).json({ err: err.message, success: false });
+  next();
 });
 app.get("/", async (req, res) => {
   res.json("Get");

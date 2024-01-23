@@ -21,7 +21,7 @@ const SignupCheck = async (req, res, next) => {
 
   const user = await LoginSchema.findOne({ _id: verify.id });
   if (!user) {
-    return next(error_handler(404, "useer not found"));
+    return next(error_handler(404, "user not found"));
   }
   res.json({ msg: user });
 };

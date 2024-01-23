@@ -17,6 +17,8 @@ const Logincheck = async (req, res, next) => {
     expires: new Date(Date.now() + 1000 * 60 * 58),
     httpOnly: true,
     sameSite: "lax",
+    secure: true,
+    domain: "https://expressyourthought.vercel.app",
   });
 
   res.json({ msg: "Login succesfull" });

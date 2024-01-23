@@ -5,6 +5,7 @@ const error_handler = require("../errorHandling");
 const SignupCheck = async (req, res, next) => {
   const cookie = process.env.COOKIE_NAME;
   const cookies = req.cookies;
+
   if (!cookies) {
     return next(error_handler(404, "Coookie not found"));
   }

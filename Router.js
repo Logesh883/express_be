@@ -2,7 +2,6 @@ const express = require("express");
 const SignupCheck = require("./Model/SigninCheck");
 const Logincheck = require("./Model/LoginCheck");
 const { postImages, Post } = require("./postMulter");
-const error_handler = require("./errorHandling");
 const getuserPost = require("./getUserPost");
 const removeData = require("./RemovePost");
 const feedPost = require("./feedpost");

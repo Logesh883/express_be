@@ -7,7 +7,7 @@ const Logincheck = async (req, res, next) => {
   const user = await LoginSchema.findOne({ Email: req.query.email });
 
   if (!user) {
-    return next(error_handler(404, "email not found"));
+    return next(error_handler(404, "user not found"));
   }
   const jwt = json.sign({ id: user.id }, process.env.JWT_SECRET, {
     expiresIn: "1hr",

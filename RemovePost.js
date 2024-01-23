@@ -10,26 +10,26 @@ cloudinary.config({
 
 const removeData = async (req, res, next) => {
   try {
+    const id = req.id;
     const postData = await postSchema.findById(req.params.id);
+    if (id == postData.login) {
+      const images = postData.image;
+      const imagesarray = [];
 
-    const images = postData.image;
-    const imagesarray = [];
+      for (let index = 0; index < images.length; index++) {
+        imagesarray.push(images[index].name);
+      }
 
-    for (let index = 0; index < images.length; index++) {
-      imagesarray.push(images[index].name);
+      if (!postData) {
+        next(error_handler(404, "No data Found"));
+        return;
+      }
+      for (imageUrl of imagesarray) {
+        await cloudinary.uploader.destroy(imageUrl);
+      }
+      await postSchema.findByIdAndDelete(req.params.id);
+      res.json({ message: "Deleted" });
     }
-
-    if (!postData) {
-      next(error_handler(404, "No data Found"));
-      return;
-    }
-    for (imageUrl of imagesarray) {
-      await cloudinary.uploader.destroy(imageUrl);
-    }
-
-    const deletedData = await postSchema.findByIdAndDelete(req.params.id);
-
-    res.json({ DeletedData: deletedData, message: "Deleted" });
   } catch (err) {
     next(error_handler(400, err.message));
   }

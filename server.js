@@ -49,6 +49,10 @@ app.get("/", async (req, res) => {
 
 app.post("/post", async (req, res) => {
   const { name, email, picture } = req.body;
+  const user = await LoginSchema.findOne({ Email: email });
+  if (user) {
+    return res.json({ data: "User already found" });
+  }
 
   const data = await LoginSchema({
     UserName: name,
@@ -63,66 +67,56 @@ const storage = multer.memoryStorage();
 const uploads = multer({ storage: storage });
 
 const DatauriParser = require("datauri/parser");
+const VERIFY_TOKEN = require("./Authentication/VERIFY_TOKEN");
+const PostSchema = require("./PostSchema");
 
 const parser = new DatauriParser();
 
-app.post("/image/:Email", uploads.single("testImage"), async (req, res) => {
-  try {
-    if (!req.file) {
-      throw new Error(400, "No file uploaded");
-    }
+app.post(
+  "/image",
+  VERIFY_TOKEN,
+  uploads.single("testImage"),
+  async (req, res) => {
+    try {
+      const id = req.id;
+      if (!req.file) {
+        throw new Error(400, "No file uploaded");
+      }
+      const posts = await PostSchema.find({ login: id });
 
-    const user = await LoginSchema.findOne({ Email: req.params.Email });
-    if (!user) {
-      throw new Error(404, "User not found");
-    }
+      const user = await LoginSchema.findOne({ _id: id });
+      if (!user) {
+        return error_handler(404, "User not found");
+      }
 
-    const extName = path.extname(req.file.originalname).toString();
-    const file64 = parser.format(extName, req.file.buffer);
+      const extName = path.extname(req.file.originalname).toString();
+      const file64 = parser.format(extName, req.file.buffer);
 
-    let image = await ImageSchema.findOne({ login: user._id });
-
-    const result = await cloudinary.uploader.upload(file64.content, {
-      folder: "ProfileImages",
-    });
-
-    if (image) {
-      image.name = result.public_id;
-      image.image.url = result.secure_url;
-      await image.save();
-      res.json({ msg: "Image Updated successfully" });
-    } else {
-      const newImage = new ImageSchema({
-        name: result.public_id,
-        image: {
-          url: result.secure_url,
-        },
-        login: user._id,
+      const result = await cloudinary.uploader.upload(file64.content, {
+        folder: "ProfileImages",
       });
-      await newImage.save();
-      res.json({ msg: "Image Uploaded successfully" });
+      posts.map(async (val, i) => {
+        val.userProfile = result.secure_url;
+        await val.save();
+      });
+      if (user) {
+        user.Profile = result.secure_url;
+        await user.save();
+        res.json({ msg: "Image Updated successfully" });
+      }
+    } catch (err) {
+      res.status(err.status || 500).json({ err: err.message, success: false });
     }
-  } catch (err) {
-    res.status(err.status || 500).json({ err: err.message, success: false });
   }
-});
+);
 
-app.get("/fetchImage/:Email", async (req, res, next) => {
-  try {
-    const idFound = await LoginSchema.findOne({ Email: req.params.Email });
-    const details = await ImageSchema.findOne({ login: idFound._id });
-
-    if (!details) {
-      next(error_handler(404, "Please Update your Profile Picture"));
-      return;
-    }
-    const imageid = details.image.url;
-
-    const username = idFound.FirstName + " " + idFound.LastName;
-    res.json({ msg: "Feteched", imageid: imageid, username: username });
-  } catch (err) {
-    res.json(err);
+app.get("/fetchImage", VERIFY_TOKEN, async (req, res, next) => {
+  const id = req.id;
+  const user = await LoginSchema.findOne({ _id: id }, "-_id");
+  if (!user) {
+    return next(error_handler(404, "user not found"));
   }
+  res.json({ fetched: user });
 });
 const PORT = process.env.PORT || 4001;
 app.listen(PORT, () => {

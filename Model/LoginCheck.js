@@ -10,11 +10,11 @@ const Logincheck = async (req, res, next) => {
     return next(error_handler(404, "email not found"));
   }
   const jwt = json.sign({ id: user.id }, process.env.JWT_SECRET, {
-    expiresIn: "30min",
+    expiresIn: "1hr",
   });
   res.cookie(COOKIE_NAME, jwt, {
     path: "/",
-    expires: new Date(Date.now() + 1000 * 60 * 27),
+    expires: new Date(Date.now() + 1000 * 60 * 58),
     httpOnly: true,
     sameSite: "lax",
   });

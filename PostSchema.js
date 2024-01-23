@@ -8,7 +8,7 @@ const PostSchema = mongoose.Schema({
   description: {
     type: String,
     required: true,
-    minLength: [3, "Please enter title more than 3 Charcters"],
+    minLength: [3, "Please enter description more than 3 Charcters"],
   },
   image: [
     {

@@ -5,18 +5,13 @@ const error_handler = require("./errorHandling");
 
 const getuserPost = async (req, res, next) => {
   try {
-    const user = await LoginSchema.findOne({ Email: req.params.Email }).select(
-      "-Password -Email -MobileNumber"
-    );
+    const id = req.id;
+    const user = await LoginSchema.findOne({ _id: id }).select("-Email");
 
     if (!user) {
       next(error_handler(400, "user not Found"));
       return;
     }
-
-    const userProfileImage = await ImageSchema.findOne({
-      login: user._id,
-    }).select("-login -name");
 
     const posts = await PostSchema.find({ login: user._id });
 
@@ -24,8 +19,6 @@ const getuserPost = async (req, res, next) => {
       return res.json({
         len: 0,
         data: [],
-        user: user,
-        imageProfile: userProfileImage,
       });
     }
     res.status(200).json({

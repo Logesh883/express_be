@@ -2,7 +2,6 @@ const LoginSchema = require("./LoginSchema");
 const PostSchema = require("./PostSchema");
 const multer = require("multer");
 const error_handler = require("./errorHandling");
-const ImageSchema = require("./ImageSchema");
 const DatauriParser = require("datauri/parser");
 const parser = new DatauriParser();
 const cloudinary = require("cloudinary").v2;
@@ -15,14 +14,9 @@ cloudinary.config({
 
 const Post = async (req, res, next) => {
   try {
-    const user = await LoginSchema.findOne({ Email: req.params.Email });
-    const imageProfile = await ImageSchema.findOne({ login: user._id }).exec();
-    if (!imageProfile) {
-      next(error_handler(404, "Please Upload Profile Picture First "));
-      return;
-    }
+    const id = req.id;
+    const user = await LoginSchema.findOne({ _id: id }, " -Email");
 
-    const ProfilePicture = imageProfile.image.url;
     let imageArray = [];
 
     if (!req.files || req.files.length === 0) {
@@ -35,6 +29,7 @@ const Post = async (req, res, next) => {
 
       const extName = path.extname(file.originalname).toString();
       const file64 = parser.format(extName, file.buffer);
+
       const result = await cloudinary.uploader.upload(file64.content, {
         folder: "PostImages",
       });
@@ -49,10 +44,9 @@ const Post = async (req, res, next) => {
       title: req.body.title,
       description: req.body.description,
       image: imageArray,
-      login: user._id,
-
-      username: user.FirstName + " " + user.LastName,
-      userProfile: ProfilePicture,
+      login: user.id,
+      username: user.UserName,
+      userProfile: user.Profile,
     });
 
     await newPost.save();

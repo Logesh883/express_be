@@ -12,16 +12,16 @@ const SignupCheck = async (req, res, next) => {
   const token = cookies[cookie];
 
   if (!token) {
-    return;
+    return next(error_handler(404, "token not found"));
   }
   const verify = jwt.verify(token, process.env.JWT_SECRET);
   if (!verify) {
-    return;
+    return next(error_handler(404, "verify not found"));
   }
 
   const user = await LoginSchema.findOne({ _id: verify.id });
   if (!user) {
-    return;
+    return next(error_handler(404, "useer not found"));
   }
   res.json({ msg: user });
 };

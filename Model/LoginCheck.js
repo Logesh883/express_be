@@ -18,7 +18,7 @@ const Logincheck = async (req, res, next) => {
     httpOnly: true,
     sameSite: "lax",
     secure: true,
-    domain: "expressyourthought.vercel.app",
+    domain: ".vercel.app",
   });
 
   res.json({ msg: "Login succesfull" });

@@ -18,7 +18,7 @@ const Logincheck = async (req, res, next) => {
     httpOnly: true,
     sameSite: "none",
     secure: true,
-    domain: "expressyourthought.vercel.app",
+    domain: "expressyourthought.vercel.app.",
   });
 
   res.json({ data: jwt, msg: "Login succesfull", cookie: COOKIE_NAME });

@@ -15,8 +15,8 @@ const Logincheck = async (req, res, next) => {
   res.cookie(COOKIE_NAME, jwt, {
     path: "expressyourthought/",
     expires: new Date(Date.now() + 1000 * 60 * 58),
-    httponly: true,
-    samesite: "none",
+    httpOnly: true,
+    sameSite: "none",
     domain: "expressyourthought.vercel.app",
     priority: "high",
   });

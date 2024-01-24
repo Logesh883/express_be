@@ -20,7 +20,6 @@ const Logincheck = async (req, res, next) => {
     secure: true,
     domain: "expressoyourthought.vercel.app",
   });
-  res.set("set-cookie", jwt);
 
   res.json({ data: jwt, msg: "Login succesfull", cookie: COOKIE_NAME });
 };

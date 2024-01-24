@@ -7,7 +7,7 @@ const Logincheck = async (req, res, next) => {
   const user = await LoginSchema.findOne({ Email: req.query.email });
 
   if (!user) {
-    return next(error_handler(404, "user not found"));
+    return next(error_handler(404, "user Email not found"));
   }
   const jwt = json.sign({ id: user.id }, process.env.JWT_SECRET, {
     expiresIn: "1hr",
@@ -16,7 +16,7 @@ const Logincheck = async (req, res, next) => {
     path: "/",
     expires: new Date(Date.now() + 1000 * 60 * 58),
 
-    domain: "expressyourthought.vercel.app",
+    domain: "localhost",
     priority: "high",
   });
 

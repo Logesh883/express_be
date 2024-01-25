@@ -13,7 +13,7 @@ const Logincheck = async (req, res, next) => {
     expiresIn: "3days",
   });
   try {
-    res.cookie(COOKIE_NAME, jwt, {
+    await res.cookie(COOKIE_NAME, jwt, {
       path: "/",
       expires: new Date(Date.now() + 1000 * 60 * 58 * 52),
       httpOnly: true,

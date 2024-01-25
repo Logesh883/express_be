@@ -12,7 +12,7 @@ const SignupCheck = async (req, res, next) => {
   const token = cookies[cookie];
 
   if (!token) {
-    return next(error_handler(404, "token not found"));
+    return next(error_handler(404, "Validation failed"));
   }
   const verify = jwt.verify(token, process.env.JWT_SECRET);
   if (!verify) {
@@ -23,6 +23,6 @@ const SignupCheck = async (req, res, next) => {
   if (!user) {
     return next(error_handler(404, "user not found"));
   }
-  res.json({ msg: user });
+  res.json({ msg: "Finded" });
 };
 module.exports = SignupCheck;

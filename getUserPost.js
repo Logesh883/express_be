@@ -1,4 +1,3 @@
-const ImageSchema = require("./ImageSchema");
 const LoginSchema = require("./LoginSchema");
 const PostSchema = require("./PostSchema");
 const error_handler = require("./errorHandling");

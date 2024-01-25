@@ -7,6 +7,7 @@ const removeData = require("./RemovePost");
 const feedPost = require("./feedpost");
 const VERIFY_TOKEN = require("./Authentication/VERIFY_TOKEN");
 const Logout = require("./Logout");
+const Sign = require("./SendEmail");
 const router = express.Router();
 
 router.get("/check", SignupCheck);
@@ -16,5 +17,5 @@ router.get("/getUserPost", VERIFY_TOKEN, getuserPost);
 router.delete("/removePost/:id", VERIFY_TOKEN, removeData);
 router.get("/allpost", VERIFY_TOKEN, feedPost);
 router.get("/logout", VERIFY_TOKEN, Logout);
-
+router.get("/changepassword", Sign);
 module.exports = router;

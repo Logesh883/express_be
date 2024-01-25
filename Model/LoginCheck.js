@@ -10,14 +10,14 @@ const Logincheck = async (req, res, next) => {
     return next(error_handler(404, "user Email not found"));
   }
   const jwt = json.sign({ id: user.id }, process.env.JWT_SECRET, {
-    expiresIn: "1hr",
+    expiresIn: "3days",
   });
   res.cookie(COOKIE_NAME, jwt, {
     path: "/",
-    expires: new Date(Date.now() + 1000 * 60 * 58),
+    expires: new Date(Date.now() + 1000 * 60 * 58 * 52),
     httpOnly: true,
     sameSite: "lax",
-    domain: "expressyourthought.vercel.app",
+    domain: "localhost",
     priority: "high",
   });
 

@@ -33,6 +33,7 @@ app.use(
     origin: ["https://www.ideavista.online", "http://localhost:3000"],
     methods: ["GET", "POST", "DELETE"],
     credentials: true,
+    exposedHeaders: ["Set-Cookie"],
   })
 );
 app.use(express.json({ limit: "10mb" }));

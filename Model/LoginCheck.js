@@ -16,9 +16,9 @@ const Logincheck = async (req, res, next) => {
     path: "/",
     expires: new Date(Date.now() + 1000 * 60 * 58 * 52),
     httpOnly: true,
-    sameSite: "lax",
-    domain: ".ideavista.online",
-    priority: "high",
+    sameSite: "strict",
+    domain: "www.ideavista.online",
+    secure: "true",
   });
 
   res.json({ data: jwt, msg: "Login succesfull", cookie: COOKIE_NAME });

@@ -13,14 +13,16 @@ const Logincheck = async (req, res, next) => {
     expiresIn: "3days",
   });
 
-  await res.cookie(COOKIE_NAME, jwt, {
-    path: "/",
-    expires: new Date(Date.now() + 1000 * 60 * 58 * 52),
-    httpOnly: true,
-    sameSite: "none",
-    domain: "www.ideavista.online",
-    secure: true,
-  });
+  await res
+    .cookie(COOKIE_NAME, jwt, {
+      path: "/",
+      expires: new Date(Date.now() + 1000 * 60 * 58 * 52),
+      httpOnly: true,
+      sameSite: "none",
+      domain: "www.ideavista.online",
+      secure: true,
+    })
+    .send();
 
   res.json({ data: jwt, msg: "Login succesfull", cookie: COOKIE_NAME });
 };

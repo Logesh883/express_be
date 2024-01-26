@@ -17,7 +17,7 @@ const Logincheck = async (req, res, next) => {
     path: "/",
     expires: new Date(Date.now() + 1000 * 60 * 58 * 52),
     httpOnly: true,
-    sameSite: "none",
+    sameSite: "lax",
     domain: ".ideavista.online",
     secure: true,
   });

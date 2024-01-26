@@ -6,6 +6,7 @@ const Logout = async (req, res, next) => {
       path: "/",
       secure: true,
       sameSite: "lax",
+      httpOnly: true,
     });
     req.cookies[process.env.COOKIE_NAME] = "";
     res.json({ msg: "Successfully Logout" });

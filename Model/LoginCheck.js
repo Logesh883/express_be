@@ -15,7 +15,7 @@ const Logincheck = async (req, res, next) => {
 
   await res.cookie(COOKIE_NAME, jwt, {
     path: "/",
-    expires: new Date(Date.now() + 1000 * 60 * 2),
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 50),
     httpOnly: true,
     sameSite: "lax",
     domain: ".ideavista.online",

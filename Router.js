@@ -9,6 +9,7 @@ const VERIFY_TOKEN = require("./Authentication/VERIFY_TOKEN");
 const Logout = require("./Logout");
 const Send = require("./SendEmail");
 const SharedPost = require("./SharedLink");
+const fetchUser = require("./Fetchuser");
 const router = express.Router();
 
 router.get("/check", SignupCheck);
@@ -20,4 +21,5 @@ router.get("/allpost", VERIFY_TOKEN, feedPost);
 router.get("/logout", VERIFY_TOKEN, Logout);
 router.get("/sharepost/:id", SharedPost);
 router.get("/changepassword", Send);
+router.get("/fetchuser", VERIFY_TOKEN, fetchUser);
 module.exports = router;

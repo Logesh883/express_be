@@ -78,9 +78,19 @@ app.post(
   uploads.single("testImage"),
   async (req, res) => {
     try {
+      let pic_url;
       const id = req.id;
-      if (!req.file) {
-        throw new Error(400, "No file uploaded");
+      const { username } = await req.body;
+      if (req.body.state === "true") {
+        state = true;
+      } else {
+        state = false;
+      }
+
+      if (state && !req.file) {
+        // console.log(state);
+        return;
+        // return error_handler(400, "No file uploaded");
       }
       const posts = await PostSchema.find({ login: id });
 
@@ -88,23 +98,29 @@ app.post(
       if (!user) {
         return error_handler(404, "User not found");
       }
-
-      const extName = path.extname(req.file.originalname).toString();
-      const file64 = parser.format(extName, req.file.buffer);
-
-      const result = await cloudinary.uploader.upload(file64.content, {
-        folder: "ProfileImages",
-      });
+      if (state) {
+        const extName = path.extname(req.file.originalname).toString();
+        const file64 = parser.format(extName, req.file.buffer);
+        var result = await cloudinary.uploader.upload(file64.content, {
+          folder: "ProfileImages",
+        });
+        pic_url = result.secure_url;
+      } else {
+        pic_url = user.Profile;
+      }
       posts.map(async (val, i) => {
-        val.userProfile = result.secure_url;
+        val.userProfile = pic_url;
+        val.username = username;
         await val.save();
       });
       if (user) {
-        user.Profile = result.secure_url;
+        user.Profile = pic_url;
+        user.UserName = username;
         await user.save();
-        res.json({ msg: "Image Updated successfully" });
+        res.json({ msg: "Profile Updated successfully" });
       }
     } catch (err) {
+      console.log(err);
       res.status(err.status || 500).json({ err: err.message, success: false });
     }
   }

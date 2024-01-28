@@ -29,24 +29,39 @@ async function Send(req, res) {
 
     let randomNumber = GenerateRandom();
 
+    const { isSign, email } = req.query;
+    if (isSign) {
+      subject = "Ideavista - Signin Succesfull";
+      text = "Welcome back to Ideavista!";
+      html = `<p>Welcome back to Ideavista!</p>
+      <div style="padding: 15px; background-color: #4CAF50; color: white; font-size: 24px; text-align: center;">
+        <strong>🎉 Success!</strong>
+      </div>
+      <p>You have successfully signed in to your Ideavista account.</p>
+      <p>If you have any questions or need assistance, feel free to reach out to our support team.</p>
+      <p>Keep exploring and sharing your amazing ideas!</p>
+      <p>Best regards,<br>Ideavista Team</p>`;
+    }
+    // html = `<p>You have requested to change your password. Please use the following OTP to proceed:</p>
+    // <div style="padding: 15px; background-color: #f0f0f0; font-size: 24px; text-align: center;">
+    //   <strong>${randomNumber}</strong>
+    // </div>
+    // <p>This OTP is valid for a short period. Do not share it with anyone for security reasons.</p>
+    // <p>If you did not request this change, please ignore this email.</p>
+    // <p>Best regards,<br>Ideavista Team</p>`;
+
     let maileroptions = {
       from: `Ideavista`,
-      to: "tlogeshwaran2003@gmail.com",
-      subject: "Ideavista - Password Change OTP",
-      text: "",
-      html: `<p>You have requested to change your password. Please use the following OTP to proceed:</p>
-      <div style="padding: 15px; background-color: #f0f0f0; font-size: 24px; text-align: center;">
-        <strong>${randomNumber}</strong>
-      </div>
-      <p>This OTP is valid for a short period. Do not share it with anyone for security reasons.</p>
-      <p>If you did not request this change, please ignore this email.</p>
-      <p>Best regards,<br>Ideavista Team</p>`,
+      to: email,
+      subject: subject,
+      text: text,
+      html: html,
     };
 
     await transport.sendMail(maileroptions);
     res.json({ msg: "Email Sent" });
   } catch (error) {
-    res, json(error);
+    res.json(error);
   }
 }
 

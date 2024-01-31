@@ -10,6 +10,8 @@ const Logout = require("./Logout");
 const Send = require("./SendEmail");
 const SharedPost = require("./SharedLink");
 const fetchUser = require("./Fetchuser");
+const Account = require("./Account");
+const DeleteAccount = require("./DeleteAccount");
 const router = express.Router();
 
 router.get("/check", SignupCheck);
@@ -22,4 +24,6 @@ router.get("/logout", VERIFY_TOKEN, Logout);
 router.get("/sharepost/:id", SharedPost);
 router.get("/changepassword", Send);
 router.get("/fetchuser", VERIFY_TOKEN, fetchUser);
+router.get("/account", VERIFY_TOKEN, Account);
+router.delete("/deleteaccount", VERIFY_TOKEN, DeleteAccount);
 module.exports = router;

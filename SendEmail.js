@@ -29,8 +29,8 @@ async function Send(req, res) {
 
     let randomNumber = GenerateRandom();
 
-    const { isSign, email } = req.query;
-    if (isSign) {
+    const { isSign, email, isDelete } = req.query;
+    if (isSign === "true") {
       subject = "Ideavista - Signin Succesfull";
       text = "Welcome back to Ideavista!";
       html = `<p>Welcome back to Ideavista!</p>
@@ -42,13 +42,17 @@ async function Send(req, res) {
       <p>Keep exploring and sharing your amazing ideas!</p>
       <p>Best regards,<br>Ideavista Team</p>`;
     }
-    // html = `<p>You have requested to change your password. Please use the following OTP to proceed:</p>
-    // <div style="padding: 15px; background-color: #f0f0f0; font-size: 24px; text-align: center;">
-    //   <strong>${randomNumber}</strong>
-    // </div>
-    // <p>This OTP is valid for a short period. Do not share it with anyone for security reasons.</p>
-    // <p>If you did not request this change, please ignore this email.</p>
-    // <p>Best regards,<br>Ideavista Team</p>`;
+    if (isDelete === "true") {
+      subject = "Ideavista - Delete Request";
+      text = "Account Deletion Request !";
+      html = `<p>You have requested to delete your account. Please use the following OTP to proceed:</p>
+      <div style="padding: 15px; background-color: #f0f0f0; font-size: 24px; text-align: center;">
+        <strong>${randomNumber}</strong>
+      </div>
+      <p>This OTP is valid for a only <b>2 minutes</b>. Do not share it with anyone for security reasons.</p>
+      <p>If you did not request this change, please ignore this email.</p>
+      <p>Best regards,<br>Ideavista Team</p>`;
+    }
 
     let maileroptions = {
       from: `Ideavista`,
@@ -59,9 +63,14 @@ async function Send(req, res) {
     };
 
     await transport.sendMail(maileroptions);
-    res.json({ msg: "Email Sent" });
+    if (isSign === "true") {
+      res.json({ msg: "Email Sent" });
+    }
+    if (isDelete === "true") {
+      res.json({ msg: ["Email sent", randomNumber] });
+    }
   } catch (error) {
-    res.json(error);
+    console.log(error);
   }
 }
 

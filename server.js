@@ -88,9 +88,7 @@ app.post(
       }
 
       if (state && !req.file) {
-        // console.log(state);
-        return;
-        // return error_handler(400, "No file uploaded");
+        return error_handler(400, "No file uploaded");
       }
       const posts = await PostSchema.find({ login: id });
 

@@ -15,7 +15,6 @@ const removeData = async (req, res, next) => {
     if (id == postData.login) {
       const images = postData.image;
       const imagesarray = [];
-
       for (let index = 0; index < images.length; index++) {
         imagesarray.push(images[index].name);
       }

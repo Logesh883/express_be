@@ -22,6 +22,6 @@ const Logincheck = async (req, res, next) => {
     secure: true,
   });
 
-  res.json({ data: jwt, msg: "Login succesfull", cookie: COOKIE_NAME });
+  res.json({ msg: "Login succesfull" });
 };
 module.exports = Logincheck;

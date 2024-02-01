@@ -1,6 +1,7 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
+const error_handler = require("./errorHandling");
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.G_CLIENTID,
@@ -9,7 +10,7 @@ const oauth2Client = new google.auth.OAuth2(
 );
 oauth2Client.setCredentials({ refresh_token: process.env.G_REFRESH_TOKEN });
 
-async function Send(req, res) {
+async function Send(req, res, next) {
   try {
     const accessToken = await oauth2Client.getAccessToken();
     const transport = nodemailer.createTransport({
@@ -28,6 +29,9 @@ async function Send(req, res) {
     });
 
     let randomNumber = GenerateRandom();
+    if (!req.headers) {
+      return next(error_handler(404, "Error in cors"));
+    }
 
     const { isSign, email, isDelete } = req.query;
     if (isSign === "true") {

@@ -13,7 +13,7 @@ const DeleteAccount = async (req, res, next) => {
     res.setHeader("Cache-Control", "no-store");
     req.cookies[process.env.COOKIE_NAME] = "";
     res.clearCookie(process.env.COOKIE_NAME, {
-      domain: "localhost",
+      domain: ".ideavista.online",
       path: "/",
       secure: true,
       sameSite: "lax",

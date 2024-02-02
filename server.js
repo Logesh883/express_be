@@ -86,7 +86,7 @@ app.post(
       } else {
         state = false;
       }
-
+      res.setHeader("Cache-Control", "no-store");
       if (state && !req.file) {
         return error_handler(400, "No file uploaded");
       }

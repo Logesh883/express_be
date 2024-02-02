@@ -12,7 +12,7 @@ const Logincheck = async (req, res, next) => {
   const jwt = json.sign({ id: user.id }, process.env.JWT_SECRET, {
     expiresIn: "3days",
   });
-
+  res.setHeader("Cache-Control", "no-store");
   await res.cookie(COOKIE_NAME, jwt, {
     path: "/",
     expires: new Date(Date.now() + 1000 * 60 * 60 * 50),

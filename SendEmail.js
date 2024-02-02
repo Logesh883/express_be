@@ -80,7 +80,7 @@ async function Send(req, res, next) {
 
 function GenerateRandom() {
   let num = Math.floor(Math.random() * 10000 + 1);
-  if (num >= 1000 && num <= 9999 && !undefined) {
+  if (num >= 1000 && num <= 9999 && num !== undefined) {
     return num;
   } else {
     GenerateRandom();

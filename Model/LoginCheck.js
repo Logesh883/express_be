@@ -1,6 +1,7 @@
 const LoginSchema = require("../LoginSchema");
 const error_handler = require("../errorHandling");
 const json = require("jsonwebtoken");
+const SettingSchema = require("./SettingSchema");
 const COOKIE_NAME = process.env.COOKIE_NAME;
 
 const Logincheck = async (req, res, next) => {
@@ -9,6 +10,9 @@ const Logincheck = async (req, res, next) => {
   if (!user) {
     return next(error_handler(404, "user Email not found"));
   }
+  const data = await SettingSchema({
+    login: user.id,
+  }).save();
   const jwt = json.sign({ id: user.id }, process.env.JWT_SECRET, {
     expiresIn: "3days",
   });
@@ -22,6 +26,6 @@ const Logincheck = async (req, res, next) => {
     secure: true,
   });
 
-  res.json({ msg: "Login succesfull" });
+  res.json({ msg: "Login succesfull", settings: data });
 };
 module.exports = Logincheck;

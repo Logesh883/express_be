@@ -12,6 +12,8 @@ const SharedPost = require("./SharedLink");
 const fetchUser = require("./Fetchuser");
 const Account = require("./Account");
 const DeleteAccount = require("./DeleteAccount");
+const { Settings, getSettings } = require("./Settings");
+const fetchInfinite = require("./fetchinfinitepost");
 const router = express.Router();
 
 router.get("/check", SignupCheck);
@@ -26,4 +28,7 @@ router.get("/changepassword", Send);
 router.get("/fetchuser", VERIFY_TOKEN, fetchUser);
 router.get("/account", VERIFY_TOKEN, Account);
 router.delete("/deleteaccount", VERIFY_TOKEN, DeleteAccount);
+router.post("/settings", VERIFY_TOKEN, Settings);
+router.get("/fetchsettings", VERIFY_TOKEN, getSettings);
+router.get("/infintepost", VERIFY_TOKEN, fetchInfinite);
 module.exports = router;
